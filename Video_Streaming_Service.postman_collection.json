@@ -1,0 +1,177 @@
+{
+  "info": {
+    "name": "Video Streaming Service",
+    "description": "Collection for testing the video streaming service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Upload Video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "video/mp4"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/upload/video",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["upload", "video"]
+        },
+        "description": "Upload a video file (max 10MB)",
+        "body": {
+          "mode": "file",
+          "file": {}
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "status": "No Content",
+          "code": 204,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "Invalid File Type",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "error": "Invalid file type",
+            "code": "ValidationError"
+          }
+        },
+        {
+          "name": "File Too Large",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "error": "File size must be less than 10MB",
+            "code": "ValidationError"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stream Full Video",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3001/static/video/{{filename}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["static", "video", "{{filename}}"]
+        },
+        "description": "Stream the complete video"
+      },
+      "response": [
+        {
+          "name": "Success",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "video/mp4"
+            }
+          ]
+        },
+        {
+          "name": "Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "error": "Video not found",
+            "code": "NotFoundError"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stream Partial Video",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Range",
+            "value": "bytes=0-1000000"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/static/video/{{filename}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["static", "video", "{{filename}}"]
+        },
+        "description": "Stream a portion of the video using range request"
+      },
+      "response": [
+        {
+          "name": "Partial Content",
+          "status": "Partial Content",
+          "code": 206,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "video/mp4"
+            },
+            {
+              "key": "Content-Range",
+              "value": "bytes 0-1000000/*"
+            }
+          ]
+        },
+        {
+          "name": "Invalid Range",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "error": "Invalid range header",
+            "code": "ValidationError"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "filename",
+      "value": "your-video-filename.mp4",
+      "type": "string"
+    }
+  ]
+} 

@@ -1,0 +1,25 @@
+{
+  "name": "video-streaming-service",
+  "author": "Priscilla Ribeiro",
+  "version": "1.0.0",
+  "description": "Video upload and streaming service with caching",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": [
+    "video",
+    "streaming",
+    "cache",
+    "node"
+  ],
+  
+  "license": "ISC",
+  "dependencies": {
+    "file-type": "^21.0.0",
+    "redis": "^5.1.0",
+    "winston": "^3.17.0"
+  }
+}
